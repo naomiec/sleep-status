@@ -1,1 +1,1 @@
-# sleep-status
+Sleep status is a web app that connects to your fitbit and displays your sleep data in a simple and easy to understand way.
