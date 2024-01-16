@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sleep Score</title>
+    <style>
+        body {
+            font-family: Lora, sans-serif;
+        }
+        .metric {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="metric">
+        <h1>Sleep Score</h1>
+        <p id="date"></p>
+        <p id="score"></p>
+    </div>
+
+    <div class="links">
+        <p><a href="hours_asleep.html">Hours Asleep</a></p>
+        <p><a href="sleep_stages.html">Sleep Stages</a></p>
+        <p><a href="spo2.html">SpO2</a></p>
+        <p><a href="interruptions.html">Interruptions</a></p>
+    </div>
+
+    <script>
+        // Get today's date
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+        // Generate a random score between 0 and 100
+        var score = Math.floor(Math.random() * 101);
+
+        // Display the date and score
+        document.getElementById('date').innerHTML = "Date: " + date;
+        document.getElementById('score').innerHTML = "Sleep Score: " + score;
+    </script>
+</body>
+</html>
