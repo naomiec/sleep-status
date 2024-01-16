@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sleep Score/title>
+    <title>Hours Asleep</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-        }
-        .metric {
             margin-top: 50px;
             text-align: center;
         }
     </style>
 </head>
 <body>
+    <a href="index.html">Home</a>
     <h1 class="metric">Hours Asleep</h1>
-    <p id="date"></p>
+    <p id="hoursAsleep"></p>
+    <p id="bedTime"></p>
+    <p id="wakeTime"></p>
+    <script>
+        // Function to convert 24 hour format to 12 hour format
+        function convertTo12Hour(time) {
+            var timePart = time >= 12 ? 'PM' : 'AM';
+            time = time % 12;
+            time = time ? time : 12; // the hour '0' should be '12'
+            return time + ':00 ' + timePart;
+        }
+
+        // Generate random hours asleep, bed time, and wake time
+        var hoursAsleep = Math.floor(Math.random() * 12);
+        var bedTime = Math.floor(Math.random() * 24);
+        var wakeTime = (bedTime + hoursAsleep) % 24;
+
+        // Display hours asleep, bed time, and wake time
+        document.getElementById('hoursAsleep').innerText = "Hours Asleep: " + hoursAsleep;
+        document.getElementById('bedTime').innerText = "Bed Time: " + convertTo12Hour(bedTime);
+        document.getElementById('wakeTime').innerText = "Wake Time: " + convertTo12Hour(wakeTime);
+    </script>
 </body>
 </html>

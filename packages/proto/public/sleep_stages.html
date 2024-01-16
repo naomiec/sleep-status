@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sleep Stages</title>
+    <style>
+        body {
+            margin-top: 50px;
+            text-align: center;
+        }
+        #stages li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Home</a>
+    <h1 class="metric">Sleep Stages</h1>
+    <p id="awake"></p>
+    <p id="light"></p>
+    <p id="deep"></p>
+    <p id="rem"></p>
+    <script>
+        // Generate a random number of each sleep stage
+        var awake = Math.floor(Math.random() * 21);
+        var light = Math.floor(Math.random() * 21);
+        var deep = Math.floor(Math.random() * 21);
+        var rem = Math.floor(Math.random() * 21);
+
+        // Generate a random number of times the person was awake
+var     awakeTimes = Math.floor(Math.random() * 26);
+
+        // Calculate total time
+        var total = awake + light + deep + rem;
+
+        // Calculate percentages
+        var awakePercentage = Math.round((awake / total) * 100);
+        var lightPercentage = Math.round((light / total) * 100);
+        var deepPercentage = Math.round((deep / total) * 100);
+        var remPercentage = Math.round((rem / total) * 100);
+
+        // Display percentages
+        document.getElementById('awake').innerText = "Awake: " + awakePercentage + "% (" + awakeTimes + " times)";
+        document.getElementById('light').innerText = "Light Sleep: " + lightPercentage + "%";
+        document.getElementById('deep').innerText = "Deep Sleep: " + deepPercentage + "%";
+        document.getElementById('rem').innerText = "REM: " + remPercentage + "%";
+    </script>
+</body>
+</html>

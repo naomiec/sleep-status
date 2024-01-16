@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number of Interruptions</title>
+    <style>
+        body {
+            margin-top: 50px;
+            text-align: center;
+        }
+        #timestamps li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Home</a>
+    <h1 class="metric">Number of Interruptions</h1>
+    <p id="interruptions"></p>
+    <h2>Timestamps</h2>
+    <ul id="timestamps"></ul>
+    <script>
+        // Generate a random number of interruptions
+        var interruptions = Math.floor(Math.random() * 21);
+        document.getElementById('interruptions').innerText = interruptions;
+
+        // Generate random timestamps
+        var timestamps = [];
+        for (var i = 0; i < interruptions; i++) {
+            var hour = Math.floor(Math.random() * 24);
+            var minute = Math.floor(Math.random() * 60);
+            var period = hour < 12 ? 'AM' : 'PM';
+            hour = hour % 12;
+            hour = hour ? hour : 12; // the hour '0' should be '12'
+            minute = minute < 10 ? '0'+minute : minute;
+            timestamps.push(hour + ':' + minute + ' ' + period);
+        }
+
+        // Display the timestamps
+        var timestampsElement = document.getElementById('timestamps');
+        timestamps.forEach(function(timestamp) {
+            var li = document.createElement('li');
+            li.innerText = timestamp;
+            timestampsElement.appendChild(li);
+        });
+    </script>
+</body>
+</html>
