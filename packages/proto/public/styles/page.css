@@ -6,15 +6,18 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    font-family: 'Workbench', serif;
 }
 
 h1 {
     background-color: #2a2a72; /* Deep blue for the header background */
     color: #f5f5f5; /* Dark black for the header text color */
+    font-family: 'Handjet', sans-serif;
 }
 
 a {
     color: #8d9fd4ef; /* Deep purple for links */
+    font-family: 'Workbench', serif;
 }
 
 .metric {
