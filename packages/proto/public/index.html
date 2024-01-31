@@ -30,8 +30,16 @@
                 Sleep Score
             </h1>
         </div>
-        <p id="date"></p>
-        <p id="score"></p>
+        <table class="info-table"> <!-- Change this to a table -->
+            <tr>
+                <td class="label">Sleep Score:</td>
+                <td class="value" id="score"></td>
+            </tr>
+            <tr>
+                <td class="label">Date:</td>
+                <td class="value" id="date"></td>
+            </tr>
+        </table>
     </div>
 
     <div class="links">
@@ -50,8 +58,8 @@
         var score = Math.floor(Math.random() * 101);
 
         // Display the date and score
-        document.getElementById('date').innerHTML = "Date: " + date;
-        document.getElementById('score').innerHTML = "Sleep Score: " + score;
+        document.getElementById('date').innerHTML = date;
+        document.getElementById('score').innerHTML = score + " / 100";
     </script>
 </body>
 </html>

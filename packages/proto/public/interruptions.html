@@ -7,8 +7,17 @@
             margin-top: 50px;
             text-align: center;
         }
+        #timestamps {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            justify-content: center;
+            padding: 0;
+        }
         #timestamps li {
             list-style-type: none;
+            padding: 5px;
+            text-align: center;
         }
     </style>
     <link rel="stylesheet" href="/styles/page.css" />
@@ -42,11 +51,11 @@
             timestamps.push(hour + ':' + minute + ' ' + period);
         }
 
-        // Display the timestamps
+        // Display the timestamps in a grid layout with labels
         var timestampsElement = document.getElementById('timestamps');
-        timestamps.forEach(function(timestamp) {
+        timestamps.forEach(function(timestamp, index) {
             var li = document.createElement('li');
-            li.innerText = timestamp;
+            li.innerText = (index + 1) + '. ' + timestamp; // Adding labels like 1, 2, 3, etc.
             timestampsElement.appendChild(li);
         });
     </script>
