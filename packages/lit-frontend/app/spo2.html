@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/styles/reset.css">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <title>SpO2 Info</title>
+    <style>
+        body {
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="/styles/page.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a href="index.html">Home</a>
+    <h1 class="metric">
+        <svg class="icon">
+           <use href="/icons/sleep.svg#icon-sp02" />
+        </svg>
+        SpO2 Info
+    </h1>
+    <p id="spo2"></p>
+    <script>
+        // Generate a random SpO2 value
+        var spo2 = Math.floor(Math.random() * 5) + 95;
+
+        // Display SpO2 value
+        document.getElementById('spo2').innerText = "SpO2: " + spo2 + "%";
+    </script>
+</body>
+</html>
