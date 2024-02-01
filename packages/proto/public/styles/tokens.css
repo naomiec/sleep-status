@@ -1,0 +1,10 @@
+:root {
+    --background-color-page: #000000;
+    --text-color-default: #FDFDFD;
+    --background-color-header: #2a2a72;
+    --text-color-header: #f5f5f5;
+    --link-color: #8d9fd4ef;
+    --background-color-metric: #796ab6;
+    --border-color-metric: #00008b98;
+    --border-color-score-box: #000000;
+}
