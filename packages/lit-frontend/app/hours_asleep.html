@@ -1,23 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="/styles/reset.css">
-    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/tokens.css">
     <title>Hours Asleep</title>
     <style>
         body {
             margin-top: 50px;
             text-align: center;
         }
+        .dropdown-content {
+        display: none; /* Hide dropdown content by default */
+        }
+
+        dropdown[open] .dropdown-content {
+            display: block; /* Show dropdown content when 'open' attribute is present */
+        }
     </style>
-    <link rel="stylesheet" href="/styles/page.css" />
+    <link rel="stylesheet" href="styles/page.css" />
     <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
 </head>
 <body>
-    <a href="index.html">Home</a>
+    <dropdown>
+        <button class="dropbutton">Home</button>
+        <div class="dropdown-content" id="dropdownLinks">
+            <a href="index.html">Home</a>
+            <a href="sleep_stages.html">Sleep Stages</a>
+            <a href="spo2.html">SpO2</a>
+            <a href="interruptions.html">Interruptions</a>
+        </div>
+    </dropdown>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const dropdown = document.querySelector('dropdown');
+          const toggleButton = dropdown.querySelector('.dropbutton');
+      
+          toggleButton.addEventListener('click', () => {
+            const isOpen = dropdown.hasAttribute('open');
+            if (isOpen) {
+              dropdown.removeAttribute('open');
+            } else {
+              dropdown.setAttribute('open', '');
+            }
+          });
+        });
+      </script>
+      <script type="module" src="../dropdown.ts"></script>
     <h1 class="metric">
         <svg class="icon">
-            <use href="/icons/sleep.svg#icon-hours-asleep" />
+            <use href="icons/sleep.svg#icon-hours-asleep" />
         </svg>
         Hours Asleep
     </h1>
