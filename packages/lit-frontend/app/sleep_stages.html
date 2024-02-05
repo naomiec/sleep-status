@@ -15,7 +15,7 @@
         .dropdown-content {
         display: none; /* Hide dropdown content by default */
         }
-        dropdown[open] .dropdown-content {
+        drop-down[open] .dropdown-content {
             display: block; /* Show dropdown content when 'open' attribute is present */
         }
     </style>
@@ -23,16 +23,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
 </head>
 <body>
-    <dropdown>
-        <button class="dropbutton">Home</button>
-        <div class="dropdown-content" id="dropdownLinks">
-            <a href="index.html">Home</a>
-            <a href="hours_asleep.html">Hours Asleep</a>
-            <a href="spo2.html">SpO2</a>
-            <a href="interruptions.html">Interruptions</a>
-            <a href="index.html">Sign Out</a>
+    <drop-down>
+        <!-- This checkbox is hidden but controls the dropdown state -->
+        <input type="checkbox" id="dropdownCheckbox" style="display: none;" />
+        <!-- The label acts as the toggle button for the dropdown -->
+        <label for="dropdownCheckbox" class="dropbutton">Home</label>
+        <!-- The dropdown content goes into a named slot "menu" -->
+        <div class="dropdown-content">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hours_asleep.html">Hours Asleep</a></li>
+                <li><a href="spo2.html">SpO2</a></li>
+                <li><a href="interruptions.html">Interruptions</a></li>
+                <li><a href="index.html">Sign Out</a></li>
+            </ul>
         </div>
-    </dropdown>
+    </drop-down>
     <h1 class="metric">
         <svg class="icon">
             <use href="icons/sleep.svg#icon-sleep-stages" />
@@ -70,7 +76,7 @@ var     awakeTimes = Math.floor(Math.random() * 26);
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-          const dropdown = document.querySelector('dropdown');
+          const dropdown = document.querySelector('drop-down');
           const toggleButton = dropdown.querySelector('.dropbutton');
       
           toggleButton.addEventListener('click', () => {
@@ -83,6 +89,6 @@ var     awakeTimes = Math.floor(Math.random() * 26);
           });
         });
       </script>
-    <script type="module" src="../dropdown.ts"></script>
+    <script type="module" src="../drop-down.ts"></script>
 </body>
 </html>

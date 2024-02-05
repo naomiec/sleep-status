@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("dropdown")
+@customElement("drop-down")
 export class DropDownElement extends LitElement {
   @property({ reflect: true, type: Boolean })
   open: boolean = false;
@@ -15,15 +15,8 @@ export class DropDownElement extends LitElement {
         .checked=${this.open}
       />
       <label for="is-shown">
-        <slot>Menu</slot>
+        <slot></slot>
       </label>
-      <slot name="menu">
-        <ul>
-          <li>Command 1</li>
-          <li>Command 2</li>
-          <li>Command 3</li>
-        </ul>
-      </slot>
     `;
   }
 
@@ -77,17 +70,19 @@ export class DropDownElement extends LitElement {
 
   _toggleClickAway(open: boolean) {
     const clickawayHandler = (ev: MouseEvent) => {
-      if (!ev.composedPath().includes(this)) {
+      // Check if the click is outside the dropdown
+      if (this.open && !this.contains(ev.target as Node)) {
         this._toggle(false);
-      } else {
-        ev.stopPropagation();
+        // Remove the event listener after the click outside is detected
+        document.removeEventListener("click", clickawayHandler);
       }
     };
 
+    // Add the event listener when the dropdown is opened
     if (open) {
-      document.addEventListener("click", clickawayHandler);
-    } else {
-      document.removeEventListener("click", clickawayHandler);
+      // Use setTimeout to add the event listener after the current click event finishes,
+      // preventing the immediate closing of the dropdown when it is opened.
+      setTimeout(() => document.addEventListener("click", clickawayHandler), 0);
     }
-  }
+}
 }

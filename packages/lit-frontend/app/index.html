@@ -4,75 +4,6 @@
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/tokens.css">
 
-    <script>
-        // Get today's date
-        var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-        // Generate a random score between 0 and 100
-        var score = Math.floor(Math.random() * 101);
-
-        // Display the date and score
-        document.getElementById('date').innerHTML = date;
-        document.getElementById('score').innerHTML = score + " / 100";
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const dropdown = document.querySelector('dropdown');
-          const toggleButton = dropdown.querySelector('.dropbutton-settings');
-      
-          toggleButton.addEventListener('click', () => {
-            const isOpen = dropdown.hasAttribute('open');
-            if (isOpen) {
-              dropdown.removeAttribute('open');
-            } else {
-              dropdown.setAttribute('open', '');
-            }
-          });
-        });
-      </script>
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const toggleSwitch = document.querySelector('toggle-switch');
-          
-          toggleSwitch.addEventListener('change', (event) => {
-            const isChecked = event.target.hasAttribute('on');
-            console.log(`Toggle switch is now ${isChecked ? 'on' : 'off'}.`);
-          });
-        });
-      </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const toggleSwitch = document.querySelector('toggle-switch');
-          const modeLabel = document.getElementById('mode-label');
-      
-          // Function to update the label based on the 'on' attribute
-          const updateLabel = () => {
-            const isChecked = toggleSwitch.hasAttribute('on');
-            modeLabel.textContent = isChecked ? 'Light Mode' : 'Dark Mode';
-          };
-      
-          // Create a MutationObserver to observe changes to attributes
-          const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-              if (mutation.type === "attributes" && mutation.attributeName === "on") {
-                updateLabel();
-              }
-            });
-          });
-      
-          // Start observing the 'toggle-switch' for attribute changes
-          observer.observe(toggleSwitch, { attributes: true });
-      
-          // Initial label update
-          updateLabel();
-        });
-      </script>
-    <script type="module" src="../dropdown.ts"></script>
-    <script type="module" src="../user-panel.ts"></script>
-    <script type="module" src="../toggle-switch.ts"></script>
-
-    <title>Sleep Score</title>
     <style>
         body {
             font-family: Lora, sans-serif;
@@ -84,27 +15,66 @@
         .dropdown-content-settings {
         display: none; /* Hide dropdown content by default */
         }
-        dropdown[open] .dropdown-content-settings {
+        drop-down[open] .dropdown-content {
             display: block; /* Show dropdown content when 'open' attribute is present */
         }
     </style>
+    
+    <script type="module" src="../drop-down.ts"></script>
+    <script type="module" src="../user-panel.ts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        // Get today's date
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+        // Generate a random score between 0 and 100
+        var score = Math.floor(Math.random() * 101);
+
+        // Display the date and score
+        document.getElementById('date').innerHTML = date;
+        document.getElementById('score').innerHTML = score + " / 100";
+    });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.querySelector('.dropbutton-settings');
+            const dropdownContent = document.getElementById('dropdownLinks');
+        
+            toggleButton.addEventListener('click', () => {
+                // Assuming the <drop-down> element toggles visibility based on an 'open' attribute
+                const dropdown = document.getElementById('userDropdown');
+                const isOpen = dropdown.hasAttribute('open');
+                if (isOpen) {
+                    dropdown.removeAttribute('open');
+                    dropdownContent.style.display = 'none';
+                } else {
+                    dropdown.setAttribute('open', '');
+                    dropdownContent.style.display = 'block';
+                }
+            });
+        });
+        </script>
+
+    <title>Sleep Score</title>
     <link rel="stylesheet" href="styles/page.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
 </head>
 <body>
-    <dropdown>
-        <button class="dropbutton-settings">
-            <img src="icons/icon-gear.svg" alt="Menu" style="height:20px; width:20px; border-radius: 30px;">
-        </button>
+    <button class="dropbutton-settings">
+        <img src="icons/icon-gear.svg" alt="Menu" style="height:20px; width:20px; border-radius: 30px;">
+    </button>
+    <drop-down id="userDropdown">
         <div class="dropdown-content-settings" id="dropdownLinks">
             <user-panel>
-                 <a href="profile_page.html">Profile Page</a>
-                <a href="index.html">Sign Out</a>
+                <a href="/profile_page">Profile Page</a><br>
+                <a href="/index">Sign Out</a>
             </user-panel>
         </div>
-    </dropdown>
+    </drop-down>
     <div class="metric">
         <div class="score-box">
             <h1>
