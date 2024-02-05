@@ -108,11 +108,26 @@
             </tr>
         </table>
     </div>
-    <div class="links">
-        <p><a href="hours_asleep.html">Hours Asleep</a></p>
-        <p><a href="sleep_stages.html">Sleep Stages</a></p>
-        <p><a href="spo2.html">SpO2</a></p>
-        <p><a href="interruptions.html">Interruptions</a></p>
+    <div class="sleep-cards-container">
+        <sleep-card>
+            <h2 slot="title"><a href="hours_asleep.html" >Hours Asleep</a></h2>
+            <p slot="description">Track the total hours you've slept to understand your sleep patterns better.</p>
+        </sleep-card>
+        
+        <sleep-card>
+            <h2 slot="title"><a href="sleep_stages.html" >Sleep Stages</a></h2>
+            <p slot="description">Review the stages of sleep you go through each night to improve sleep quality.</p>
+        </sleep-card>
+        
+        <sleep-card>
+            <h2 slot="title"><a href="spo2.html" >SpO2</a></h2>
+            <p slot="description">Monitor your blood oxygen levels during sleep to identify potential health issues.</p>
+        </sleep-card>
+        
+        <sleep-card>
+            <h2 slot="title"><a href="interruptions.html" >Interruptions</a></h2>
+            <p slot="description">Keep track of any interruptions in your sleep to find ways to sleep more soundly.</p>
+        </sleep-card>
     </div>
 </body>
 </html>
