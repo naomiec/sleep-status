@@ -3,64 +3,6 @@
 <head>
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/tokens.css">
-    <title>Sleep Score</title>
-    <style>
-        body {
-            font-family: Lora, sans-serif;
-        }
-        .links {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .dropdown-content-settings {
-        display: none; /* Hide dropdown content by default */
-        }
-        dropdown[open] .dropdown-content-settings {
-            display: block; /* Show dropdown content when 'open' attribute is present */
-        }
-    </style>
-    <link rel="stylesheet" href="styles/page.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
-</head>
-<body>
-    <dropdown>
-        <button class="dropbutton-settings">
-            <img src="icons/icon-gear.svg" alt="Menu" style="height:20px; width:20px; border-radius: 30px;">
-        </button>
-        <div class="dropdown-content-settings" id="dropdownLinks">
-            <a href="profile_page.html">Profile Page</a>
-            <a href="index.html">Sign Out</a>
-        </div>
-    </dropdown>
-    <div class="metric">
-        <div class="score-box">
-            <h1>
-                <svg class="icon">
-                    <use href="icons/sleep.svg#icon-sleeping" />
-                </svg>
-                Sleep Score
-            </h1>
-        </div>
-        <table class="info-table"> <!-- Change this to a table -->
-            <tr>
-                <td class="label">Sleep Score:</td>
-                <td class="value" id="score"></td>
-            </tr>
-            <tr>
-                <td class="label">Date:</td>
-                <td class="value" id="date"></td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="links">
-        <p><a href="hours_asleep.html">Hours Asleep</a></p>
-        <p><a href="sleep_stages.html">Sleep Stages</a></p>
-        <p><a href="spo2.html">SpO2</a></p>
-        <p><a href="interruptions.html">Interruptions</a></p>
-    </div>
 
     <script>
         // Get today's date
@@ -89,6 +31,105 @@
           });
         });
       </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const toggleSwitch = document.querySelector('toggle-switch');
+          
+          toggleSwitch.addEventListener('change', (event) => {
+            const isChecked = event.target.hasAttribute('on');
+            console.log(`Toggle switch is now ${isChecked ? 'on' : 'off'}.`);
+          });
+        });
+      </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const toggleSwitch = document.querySelector('toggle-switch');
+          const modeLabel = document.getElementById('mode-label');
+      
+          // Function to update the label based on the 'on' attribute
+          const updateLabel = () => {
+            const isChecked = toggleSwitch.hasAttribute('on');
+            modeLabel.textContent = isChecked ? 'Light Mode' : 'Dark Mode';
+          };
+      
+          // Create a MutationObserver to observe changes to attributes
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === "attributes" && mutation.attributeName === "on") {
+                updateLabel();
+              }
+            });
+          });
+      
+          // Start observing the 'toggle-switch' for attribute changes
+          observer.observe(toggleSwitch, { attributes: true });
+      
+          // Initial label update
+          updateLabel();
+        });
+      </script>
     <script type="module" src="../dropdown.ts"></script>
+    <script type="module" src="../user-panel.ts"></script>
+    <script type="module" src="../toggle-switch.ts"></script>
+
+    <title>Sleep Score</title>
+    <style>
+        body {
+            font-family: Lora, sans-serif;
+        }
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .dropdown-content-settings {
+        display: none; /* Hide dropdown content by default */
+        }
+        dropdown[open] .dropdown-content-settings {
+            display: block; /* Show dropdown content when 'open' attribute is present */
+        }
+    </style>
+    <link rel="stylesheet" href="styles/page.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+</head>
+<body>
+    <dropdown>
+        <button class="dropbutton-settings">
+            <img src="icons/icon-gear.svg" alt="Menu" style="height:20px; width:20px; border-radius: 30px;">
+        </button>
+        <div class="dropdown-content-settings" id="dropdownLinks">
+            <user-panel>
+                 <a href="profile_page.html">Profile Page</a>
+                <a href="index.html">Sign Out</a>
+            </user-panel>
+        </div>
+    </dropdown>
+    <div class="metric">
+        <div class="score-box">
+            <h1>
+                <svg class="icon">
+                    <use href="icons/sleep.svg#icon-sleeping" />
+                </svg>
+                Sleep Score
+            </h1>
+        </div>
+        <table class="info-table"> <!-- Change this to a table -->
+            <tr>
+                <td class="label">Sleep Score:</td>
+                <td class="value" id="score"></td>
+            </tr>
+            <tr>
+                <td class="label">Date:</td>
+                <td class="value" id="date"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="links">
+        <p><a href="hours_asleep.html">Hours Asleep</a></p>
+        <p><a href="sleep_stages.html">Sleep Stages</a></p>
+        <p><a href="spo2.html">SpO2</a></p>
+        <p><a href="interruptions.html">Interruptions</a></p>
+    </div>
 </body>
 </html>

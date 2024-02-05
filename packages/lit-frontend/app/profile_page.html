@@ -6,6 +6,45 @@
     <title>User Profile</title>
     <link rel="stylesheet" href="styles/page.css" />
     <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+    <script type="module" src="../toggle-switch.ts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const toggleSwitch = document.querySelector('toggle-switch');
+          const modeLabel = document.getElementById('mode-label');
+      
+          // Function to update the label based on the 'on' attribute
+          const updateLabel = () => {
+            const isChecked = toggleSwitch.hasAttribute('on');
+            modeLabel.textContent = isChecked ? 'Light Mode' : 'Dark Mode';
+          };
+      
+          // Create a MutationObserver to observe changes to attributes
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === "attributes" && mutation.attributeName === "on") {
+                updateLabel();
+              }
+            });
+          });
+      
+          // Start observing the 'toggle-switch' for attribute changes
+          observer.observe(toggleSwitch, { attributes: true });
+      
+          // Initial label update
+          updateLabel();
+        });
+    </script>
+    <style>
+        toggle-switch {
+            position: fixed; /* Fixed position to keep it at the bottom right on every page */
+            bottom: 20px; /* Distance from the bottom */
+            right: 20px; /* Distance from the right */
+            display: inline; /* Hide toggle switch by default */
+            }
+            toggle-switch[on] {
+                display: block; /* Show toggle switch when 'on' attribute is present */
+            }
+    </style>
 </head>
 <body>
     <div>
@@ -14,6 +53,11 @@
         <p><strong>Email:</strong> john.doe@example.com</p>
         <p><strong>Member Since:</strong> January 2021</p>
         <a href="index.html">Sign Out</a>
+    </div>
+     <div class="toggle-switch">
+        <toggle-switch id="toggle-switch">
+            <label id="mode-label"></label> 
+        </toggle-switch>
     </div>
 </body>
 </html>

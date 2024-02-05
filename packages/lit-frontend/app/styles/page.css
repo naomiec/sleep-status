@@ -142,3 +142,10 @@ svg.icon {
 .dropdown-content-settings a:hover {background-color:var(--background-color-metric); border-radius: 10px;}
 .dropdown:hover .dropdown-content-settings {display: block;}
 .dropdown:hover .dropbutton-settings {background-color: var(--border-color-score-box);}
+
+.toggle-switch {
+    position: absolute; /* Fixed position to keep it at the bottom right on every page */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+}
+

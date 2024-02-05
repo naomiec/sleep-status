@@ -7,4 +7,11 @@
     --background-color-metric: #796ab6;
     --border-color-metric: #00008b98;
     --border-color-score-box: #000000;
+
+    --size-spacing-small: 0.25rem;
+    --size-spacing-medium: 0.5rem;
+    --size-spacing-large: 1rem;
+    --size-spacing-xlarge: 2rem;
+
+    --time-transition-control: 300ms;
 }
