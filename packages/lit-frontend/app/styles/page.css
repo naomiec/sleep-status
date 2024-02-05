@@ -79,8 +79,8 @@ svg.icon {
     width: fit-content;
 }
 .dropbutton {
-    background-color: --link-color;
-    color: --link-color;
+    background-color: var(--background-color-metric);
+    color: var(--text-color-header);
     padding: 8px;
     font-size: 16px;
     border: none;
@@ -102,12 +102,12 @@ svg.icon {
     border-radius: 10px;
 }
 .dropdown-content a {
-    color: --text-color-default;
+    color: var(--text-color-default);
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
-.dropdown-content a:hover {background-color: --background-color-header;}
+.dropdown-content a:hover {background-color:var(--background-color-metric); border-radius: 10px;}
 .dropdown:hover .dropdown-content {display: block;}
-.dropdown:hover .dropbutton {background-color: --link-color;}
+.dropdown:hover .dropbutton {background-color: var(--border-color-score-box);}
 
