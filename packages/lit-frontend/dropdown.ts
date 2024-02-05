@@ -2,7 +2,7 @@ import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("dropdown")
-class DropDownElement extends LitElement {
+export class DropDownElement extends LitElement {
   @property({ reflect: true, type: Boolean })
   open: boolean = false;
 
