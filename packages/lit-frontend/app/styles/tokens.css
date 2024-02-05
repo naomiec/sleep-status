@@ -18,11 +18,12 @@
 
 body.light-mode {
     --background-color-page: #f5f5f5;
-    --text-color-default: #000000;
-    --background-color-header: #2a2a72;
-    --text-color-header: #000000;
+    --text-color-default: #00008b98;
+    --background-color-header: #8585db;
+    --text-color-header: #00008b98;
     --link-color: #8d9fd4ef;
-    --background-color-metric: #796ab6;
-    --border-color-metric: #00008b98;
-    --border-color-score-box: #000000;
+    --background-color-metric: #aba1d3;
+    --border-color-metric: #796ab6;
+    --border-color-score-box: #f5f5f5;
   }
+

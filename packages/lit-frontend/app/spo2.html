@@ -64,6 +64,16 @@
             }
           });
         });
+        document.addEventListener('DOMContentLoaded', () => {
+        const isLightMode = localStorage.getItem('lightMode') === 'true';
+        document.body.classList.toggle('light-mode', isLightMode);
+
+        // If you're using a custom toggle-switch element on multiple pages,
+        // you may also want to ensure it's in the correct state:
+        const toggleSwitch = document.querySelector('toggle-switch');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('on', isLightMode);
+        }});
       </script>
     <script type="module" src="../drop-down.ts"></script>
 </body>

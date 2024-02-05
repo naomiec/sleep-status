@@ -9,7 +9,7 @@ export class ToggleSwitchElement extends LitElement {
   render() {
     return html`<label>
       <span class="slider">
-        <input type="checkbox" @change=${this._handleChange} />
+        <input type="checkbox" ?checked=${this.on} @change=${this._handleChange} />
       </span>
       <slot></slot>
     </label>`;
@@ -60,5 +60,13 @@ export class ToggleSwitchElement extends LitElement {
   _handleChange(ev: Event) {
     const target = ev.target as HTMLInputElement;
     this.on = target?.checked;
+    localStorage.setItem('lightMode', String(this.on));
+  }
+
+  constructor() {
+    super();
+    // Check if 'lightMode' state is saved in localStorage and set 'on' accordingly
+    const savedState = localStorage.getItem('lightMode');
+    this.on = savedState === 'true';
   }
 }
