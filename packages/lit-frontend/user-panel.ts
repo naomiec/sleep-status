@@ -13,6 +13,8 @@ export class UserPanel extends LitElement {
       margin-bottom: 8px;
       color: var(--text-color-header);
       text-decoration: none;
+      white-space: nowrap;
+      text-align: right;
     }
   `;
 

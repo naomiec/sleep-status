@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/tokens.css">
+    <link rel="stylesheet" href="styles/page.css" />
 
     <style>
         body {
@@ -67,14 +68,15 @@
     <button class="dropbutton-settings">
         <img src="icons/icon-gear.svg" alt="Menu" style="height:20px; width:20px; border-radius: 30px;">
     </button>
-    <drop-down id="userDropdown">
-        <div class="dropdown-content-settings" id="dropdownLinks">
+    <drop-down id="userDropdown" style="position: absolute; right: 0; width: max-content;">
+        <div class="dropdown-content-settings" id="dropdownLinks" >
             <user-panel>
-                <a href="/profile_page">Profile Page</a><br>
-                <a href="/index">Sign Out</a>
+                <a href="profile_page">Profile Page</a><br>
+                <a href="index">Sign Out</a>
             </user-panel>
         </div>
     </drop-down>
+    
     <div class="metric">
         <div class="score-box">
             <h1>
