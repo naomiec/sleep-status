@@ -53,9 +53,8 @@
 <body>
     <div>
         <h1><strong></strong>User Profile</h1>
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Email:</strong> john.doe@example.com</p>
-        <p><strong>Member Since:</strong> January 2021</p>
+        <p><strong>Name:</strong> <span id="profileName">John Doe</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">john.doe@example.com</span></p>
         <a href="index.html">Sign Out</a>
     </div>
      <div class="toggle-switch">
@@ -63,5 +62,22 @@
             <label id="mode-label"></label> 
         </toggle-switch>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+          const userid = 'user0';
+          try {
+              const response = await fetch(`http://localhost:3000/api/profile/${userid}`);
+              if (!response.ok) {
+                  throw new Error('Profile not found');
+              }
+              const profile = await response.json(); // Assuming the response is JSON
+              // Update profile information
+              document.getElementById('profileName').textContent = profile.name;
+              document.getElementById('profileEmail').textContent = profile.email;
+          } catch (error) {
+              console.error('Failed to fetch profile:', error);
+          }
+      });
+    </script>
 </body>
 </html>
