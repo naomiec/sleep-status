@@ -91,12 +91,6 @@ export class UserProfileElement extends LitElement {
 
 @customElement("user-profile-edit")
 export class UserProfileEditElement extends UserProfileElement {
-  render() {
-    return html`<form @submit=${this._handleSubmit}>
-        <!-- fill in form here -->
-        <button type="submit">Submit</button>
-    </form> `;
-  }
 
   static styles = UserProfileElement.styles;
 
@@ -115,6 +109,30 @@ export class UserProfileEditElement extends UserProfileElement {
     const json = Object.fromEntries(entries);
 
     this._putData(json);
+  }
+
+  render() {
+    return html`
+      <form @submit=${this._handleSubmit}>
+        <div>
+          <label for="userid">User ID:</label>
+          <input id="userid" name="userid" type="text" .value=${this.profile?.userid || ''} disabled>
+        </div>
+        <div>
+          <label for="name">Name:</label>
+          <input id="name" name="name" type="text" .value=${this.profile?.name || ''} required>
+        </div>
+        <div>
+          <label for="nickname">Nickname:</label>
+          <input id="nickname" name="nickname" type="text" .value=${this.profile?.nickname || ''}>
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input id="email" name="email" type="email" .value=${this.profile?.email || ''} required>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    `;
   }
 
   _putData(json: Profile) {

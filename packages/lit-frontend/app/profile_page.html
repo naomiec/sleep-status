@@ -55,7 +55,7 @@
         <h1><strong></strong>User Profile</h1>
         <p><strong>Name:</strong> <span id="profileName">John Doe</span></p>
         <p><strong>Email:</strong> <span id="profileEmail">john.doe@example.com</span></p>
-        <a href="index.html">Sign Out</a>
+        <a href="index.html">Return Home</a>
     </div>
      <div class="toggle-switch">
         <toggle-switch id="toggle-switch">
@@ -64,9 +64,9 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-          const userid = 'user0';
+          const userid = 'user1';
           try {
-              const response = await fetch(`http://localhost:3000/api/profile/${userid}`);
+              const response = await fetch(`http://localhost:3000/api/profiles/${userid}`);
               if (!response.ok) {
                   throw new Error('Profile not found');
               }
