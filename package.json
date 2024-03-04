@@ -4,8 +4,7 @@
   "description": "",
   "main": "public/index.js",
   "author": "",
-  "license": "ISC"
-  ,
+  "license": "ISC",
     "workspaces": [
         "packages/*"
     ]

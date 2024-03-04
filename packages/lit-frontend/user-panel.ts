@@ -21,6 +21,10 @@ export class UserPanel extends LitElement {
   render() {
     return html`
       <a href="profile_page.html">Profile Page</a>
+<<<<<<< HEAD
     `;
+=======
+         `;
+>>>>>>> pe-4
   }
 }
