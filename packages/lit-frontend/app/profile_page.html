@@ -70,7 +70,7 @@
               if (!response.ok) {
                   throw new Error('Profile not found');
               }
-              const profile = await response.json(); // Assuming the response is JSON
+              const profile = await response.json();
               // Update profile information
               document.getElementById('profileName').textContent = profile.name;
               document.getElementById('profileEmail').textContent = profile.email;

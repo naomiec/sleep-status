@@ -102,7 +102,7 @@ app.get("/api/sleep", async (req: Request, res: Response) => {
 });
 
 app.get("/api/spO2", async (req: Request, res: Response) => {
-  const userId = "naomi"; // Assuming you're using the same user identification logic
+  const userId = "naomi"; 
 
   // Calculate yesterday's date
   const today = new Date();
