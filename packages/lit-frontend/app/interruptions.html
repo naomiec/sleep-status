@@ -56,31 +56,44 @@
     <p id="interruptions"></p>
     <h2>Timestamps</h2>
     <ul id="timestamps"></ul>
+   
     <script>
-        // Generate a random number of interruptions
-        var interruptions = Math.floor(Math.random() * 21);
-        document.getElementById('interruptions').innerText = interruptions;
-
-        // Generate random timestamps
-        var timestamps = [];
-        for (var i = 0; i < interruptions; i++) {
-            var hour = Math.floor(Math.random() * 24);
-            var minute = Math.floor(Math.random() * 60);
-            var period = hour < 12 ? 'AM' : 'PM';
-            hour = hour % 12;
-            hour = hour ? hour : 12; // the hour '0' should be '12'
-            minute = minute < 10 ? '0'+minute : minute;
-            timestamps.push(hour + ':' + minute + ' ' + period);
-        }
-
-        // Display the timestamps in a grid layout with labels
-        var timestampsElement = document.getElementById('timestamps');
-        timestamps.forEach(function(timestamp, index) {
-            var li = document.createElement('li');
-            li.innerText = (index + 1) + '. ' + timestamp; // Adding labels like 1, 2, 3, etc.
-            timestampsElement.appendChild(li);
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/sleep');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sleep data');
+                }
+                const data_raw = await response.json();
+                const sleepData = data_raw.sleep[0];
+                console.log('Sleep data:', sleepData);
+                const wakeTimes = sleepData.levels.data.filter(level => level.level === 'wake').map(wake => wake.dateTime);
+    
+                // Display the wake times
+                var timestampsElement = document.getElementById('timestamps');
+                wakeTimes.forEach(function(wakeTime, index) {
+                    var date = new Date(wakeTime);
+                    var hour = date.getHours();
+                    var minute = date.getMinutes();
+                    var period = hour < 12 ? 'AM' : 'PM';
+                    hour = hour % 12;
+                    hour = hour ? hour : 12; // the hour '0' should be '12'
+                    minute = minute < 10 ? '0' + minute : minute;
+                    var formattedTime = hour + ':' + minute + ' ' + period;
+    
+                    var li = document.createElement('li');
+                    li.innerText = (index + 1) + '. ' + formattedTime; // Adding labels like 1, 2, 3, etc.
+                    timestampsElement.appendChild(li);
+                });
+    
+                // Update the number of interruptions
+                document.getElementById('interruptions').innerText = wakeTimes.length;
+            } catch (error) {
+                console.error('Error fetching sleep data:', error);
+            }
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
           const dropdown = document.querySelector('drop-down');
@@ -99,8 +112,6 @@
         const isLightMode = localStorage.getItem('lightMode') === 'true';
         document.body.classList.toggle('light-mode', isLightMode);
 
-        // If you're using a custom toggle-switch element on multiple pages,
-        // you may also want to ensure it's in the correct state:
         const toggleSwitch = document.querySelector('toggle-switch');
         if (toggleSwitch) {
             toggleSwitch.setAttribute('on', isLightMode);

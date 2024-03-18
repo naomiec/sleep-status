@@ -87,7 +87,7 @@
                 console.error('Error fetching sleep data:', error);
             }
 
-            document.getElementById('chartContainer').style.display = 'block';
+            document.getElementById('chartContainer').style.display = 'none';
 
             // Fetch the CSS variable values
             var headerBgColor = getComputedStyle(document.documentElement)
@@ -204,6 +204,8 @@
             document.addEventListener('DOMContentLoaded', fetchAndDisplaySleepStages);
         </script>
 
+        
+
         <script>
             document.addEventListener('DOMContentLoaded', () => {
               const dropdown = document.querySelector('drop-down');
@@ -222,8 +224,6 @@
             const isLightMode = localStorage.getItem('lightMode') === 'true';
             document.body.classList.toggle('light-mode', isLightMode);
 
-            // If you're using a custom toggle-switch element on multiple pages,
-            // you may also want to ensure it's in the correct state:
             const toggleSwitch = document.querySelector('toggle-switch');
             if (toggleSwitch) {
                 toggleSwitch.setAttribute('on', isLightMode);

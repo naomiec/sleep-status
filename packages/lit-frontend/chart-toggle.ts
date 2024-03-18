@@ -7,6 +7,7 @@ export class ChartToggleElement extends LitElement {
   showChart: boolean = false;
 
   render() {
+    console.log("Rendering chart-toggle, showChart:", this.showChart);
     return html`
       <label>
         <span class="label">${this.showChart ? "Chart View" : "Data View"}</span>
@@ -41,6 +42,10 @@ export class ChartToggleElement extends LitElement {
     }
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this._toggleChartDisplay();
+  }
 
   static styles = css`
     :host {
