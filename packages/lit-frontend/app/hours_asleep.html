@@ -71,24 +71,30 @@
     <p id="hoursAsleep"></p>
     <p id="bedTime"></p>
     <p id="wakeTime"></p>
+    
     <script>
-        // Function to convert 24 hour format to 12 hour format
-        function convertTo12Hour(time) {
-            var timePart = time >= 12 ? 'PM' : 'AM';
-            time = time % 12;
-            time = time ? time : 12; // the hour '0' should be '12'
-            return time + ':00 ' + timePart;
+        async function fetchSleepData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/sleep');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sleep data');
+                }
+                const data = await response.json();
+                const sleepData = data.sleep[0];
+
+                const startTime = new Date(sleepData.startTime);
+                const endTime = new Date(sleepData.endTime);
+
+                // Convert to 12-hour format and display
+                document.getElementById('hoursAsleep').innerText = "Hours Asleep: " + (sleepData.duration / (1000 * 60 * 60)).toFixed(2) + " hours";                document.getElementById('bedTime').innerText = "Bed Time: " + startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                document.getElementById('wakeTime').innerText = "Wake Time: " + endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            } catch (error) {
+                console.error('Error fetching sleep data:', error);
+            }
         }
 
-        // Generate random hours asleep, bed time, and wake time
-        var hoursAsleep = Math.floor(Math.random() * 12);
-        var bedTime = Math.floor(Math.random() * 24);
-        var wakeTime = (bedTime + hoursAsleep) % 24;
-
-        // Display hours asleep, bed time, and wake time
-        document.getElementById('hoursAsleep').innerText = "Hours Asleep: " + hoursAsleep;
-        document.getElementById('bedTime').innerText = "Bed Time: " + convertTo12Hour(bedTime);
-        document.getElementById('wakeTime').innerText = "Wake Time: " + convertTo12Hour(wakeTime);
+        document.addEventListener('DOMContentLoaded', fetchSleepData);
     </script>
+
 </body>
 </html>

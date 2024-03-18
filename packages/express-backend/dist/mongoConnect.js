@@ -6,9 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = void 0;
 // src/mongoConnect.ts
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
 mongoose_1.default.set("debug", true);
-dotenv_1.default.config();
+require('dotenv').config();
 function getMongoURI(dbname) {
     let connection_string = `mongodb://localhost:27017/${dbname}`;
     const { MONGO_USER, MONGO_PWD, MONGO_CLUSTER } = process.env;

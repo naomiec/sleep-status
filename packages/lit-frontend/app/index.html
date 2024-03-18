@@ -23,19 +23,23 @@
     
     <script type="module" src="../drop-down.ts"></script>
     <script type="module" src="../user-panel.ts"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        // Get today's date
-        var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-        // Generate a random score between 0 and 100
-        var score = Math.floor(Math.random() * 101);
-
-        // Display the date and score
-        document.getElementById('date').innerHTML = date;
-        document.getElementById('score').innerHTML = score + " / 100";
-    });
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/sleep');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sleep data');
+                }
+                const data_raw = await response.json();
+                const sleepData = data_raw.sleep[0];
+                console.log('Sleep data:', sleepData);
+                document.getElementById('score').textContent = sleepData.efficiency + " / 100";
+                document.getElementById('date').textContent = sleepData.dateOfSleep;
+            } catch (error) {
+                console.error('Error fetching sleep data:', error);
+            }
+        });
     </script>
     
     <script>
