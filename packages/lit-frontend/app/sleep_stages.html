@@ -56,179 +56,181 @@
     <div id="chartContainer" style="display: none;"></div>
 
     <script>
-        // Generate a random number of each sleep stage
-        var awake = Math.floor(Math.random() * 21);
-        var light = Math.floor(Math.random() * 21);
-        var deep = Math.floor(Math.random() * 21);
-        var rem = Math.floor(Math.random() * 21);
-    
-        // Generate a random number of times the person was awake
-        var awakeTimes = Math.floor(Math.random() * 26);
-    
-        // Calculate total time
-        var total = awake + light + deep + rem;
-    
-        // Calculate raw percentages
-        var awakePercentage = (awake / total) * 100;
-        var lightPercentage = (light / total) * 100;
-        var deepPercentage = (deep / total) * 100;
-        var remPercentage = (rem / total) * 100;
-    
-        // Normalize percentages to ensure they sum up to 100%
-        var sumOfPercentages = awakePercentage + lightPercentage + deepPercentage + remPercentage;
-        awakePercentage = Math.round((awakePercentage / sumOfPercentages) * 100);
-        lightPercentage = Math.round((lightPercentage / sumOfPercentages) * 100);
-        deepPercentage = Math.round((deepPercentage / sumOfPercentages) * 100);
-        remPercentage = Math.round((remPercentage / sumOfPercentages) * 100);
-    
-        // Display percentages
-        document.getElementById('awake').innerText = "Awake: " + awakePercentage + "% (" + awakeTimes + " times)";
-        document.getElementById('light').innerText = "Light Sleep: " + lightPercentage + "%";
-        document.getElementById('deep').innerText = "Deep Sleep: " + deepPercentage + "%";
-        document.getElementById('rem').innerText = "REM: " + remPercentage + "%";
-    </script>
+        async function fetchAndDisplaySleepStages() {
+            let awakePercentage, lightPercentage, deepPercentage, remPercentage;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const dropdown = document.querySelector('drop-down');
-          const toggleButton = dropdown.querySelector('.dropbutton');
-      
-          toggleButton.addEventListener('click', () => {
-            const isOpen = dropdown.hasAttribute('open');
-            if (isOpen) {
-              dropdown.removeAttribute('open');
-            } else {
-              dropdown.setAttribute('open', '');
+            try {
+                const response = await fetch('http://localhost:3000/api/sleep');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sleep data');
+                }
+                const data = await response.json();
+                const sleepData = data.sleep[0];
+                console.log(sleepData);
+                // Extract the summary of sleep stages
+                const { deep, light, rem, wake } = sleepData.levels.summary;
+                // Calculate total minutes of sleep to calculate percentages
+                const totalMinutes = deep.minutes + light.minutes + rem.minutes + wake.minutes;
+    
+                // Calculate percentages
+                awakePercentage = ((wake.minutes / totalMinutes) * 100).toFixed(2);
+                lightPercentage = ((light.minutes / totalMinutes) * 100).toFixed(2);
+                deepPercentage = ((deep.minutes / totalMinutes) * 100).toFixed(2);
+                remPercentage = ((rem.minutes / totalMinutes) * 100).toFixed(2);
+    
+                // Display percentages
+                document.getElementById('awake').innerText = `Awake: ${awakePercentage}% (${wake.count} times)`;
+                document.getElementById('light').innerText = `Light Sleep: ${lightPercentage}%`;
+                document.getElementById('deep').innerText = `Deep Sleep: ${deepPercentage}%`;
+                document.getElementById('rem').innerText = `REM: ${remPercentage}%`;
+            } catch (error) {
+                console.error('Error fetching sleep data:', error);
             }
-          });
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-        const isLightMode = localStorage.getItem('lightMode') === 'true';
-        document.body.classList.toggle('light-mode', isLightMode);
 
-        // If you're using a custom toggle-switch element on multiple pages,
-        // you may also want to ensure it's in the correct state:
-        const toggleSwitch = document.querySelector('toggle-switch');
-        if (toggleSwitch) {
-            toggleSwitch.setAttribute('on', isLightMode);
-        }});
-      </script>
-    <script type="module" src="../drop-down.ts"></script>
-    <script type="module" src="../chart-toggle.ts"></script>
+            document.getElementById('chartContainer').style.display = 'block';
 
-    <script>
-        // Assuming the CSS variable --background-color-header is defined in your CSS
-        // Fetch the CSS variable values
-        var headerBgColor = getComputedStyle(document.documentElement)
-            .getPropertyValue('--background-color-header').trim();
-        var metricBorderColor = getComputedStyle(document.documentElement)
-            .getPropertyValue('--background-color-metric').trim();
-        var defaultTextColor = getComputedStyle(document.documentElement)
-            .getPropertyValue('--text-color-default').trim();
-    
-        // Convert hex color to RGB
-        function hexToRgb(hex) {
-            var r = 0, g = 0, b = 0;
-            if (hex.length == 4) {
-                r = parseInt(hex[1] + hex[1], 16);
-                g = parseInt(hex[2] + hex[2], 16);
-                b = parseInt(hex[3] + hex[3], 16);
-            } else if (hex.length == 7) {
-                r = parseInt(hex[1] + hex[2], 16);
-                g = parseInt(hex[3] + hex[4], 16);
-                b = parseInt(hex[5] + hex[6], 16);
+            // Fetch the CSS variable values
+            var headerBgColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--background-color-header').trim();
+            var metricBorderColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--background-color-metric').trim();
+            var defaultTextColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--text-color-default').trim();
+        
+            // Convert hex color to RGB
+            function hexToRgb(hex) {
+                var r = 0, g = 0, b = 0;
+                if (hex.length == 4) {
+                    r = parseInt(hex[1] + hex[1], 16);
+                    g = parseInt(hex[2] + hex[2], 16);
+                    b = parseInt(hex[3] + hex[3], 16);
+                } else if (hex.length == 7) {
+                    r = parseInt(hex[1] + hex[2], 16);
+                    g = parseInt(hex[3] + hex[4], 16);
+                    b = parseInt(hex[5] + hex[6], 16);
+                }
+                return [r, g, b];
             }
-            return [r, g, b];
-        }
-    
-        var headerBgColorRgb = hexToRgb(headerBgColor);
-    
-        // Interpolate between two colors
-        function interpolateColor(colorRgb, factor) {
-            var white = [240, 230, 250];
-            return colorRgb.map(function(c, i) {
-                return Math.round(c + (white[i] - c) * factor);
-            });
-        }
-    
-        // Data for the chart
-        var data = [
-        {stage: "Awake", value: awakePercentage},
-        {stage: "Light Sleep", value: lightPercentage},
-        {stage: "Deep Sleep", value: deepPercentage},
-        {stage: "REM", value: remPercentage}
-        ];
+        
+            var headerBgColorRgb = hexToRgb(headerBgColor);
+        
+            // Interpolate between two colors
+            function interpolateColor(colorRgb, factor) {
+                var white = [240, 230, 250];
+                return colorRgb.map(function(c, i) {
+                    return Math.round(c + (white[i] - c) * factor);
+                });
+            }
+        
+            // Data for the chart
+            var data = [
+            {stage: "Awake", value: awakePercentage},
+            {stage: "Light Sleep", value: lightPercentage},
+            {stage: "Deep Sleep", value: deepPercentage},
+            {stage: "REM", value: remPercentage}
+            ];
 
-        // Filter out stages with 0 percentage
-        var filteredData = data.filter(function(d) { return d.value > 0; });
-    
-        // Set dimensions and radius of the pie chart
-        var width = 600;
-        var height = 400;
-        var radius = Math.min(width, height) / 2;
-    
-        // Create the SVG container for the chart and set its dimensions
-        var svg = d3.select('#chartContainer').append('svg')
-            .attr('width', width + 100) // Add extra width for the legend
-            .attr('height', height)
-            .append('g')
-            .attr('transform', 'translate(' + radius + ',' + height / 2 + ')');
-    
-        // Create a pie generator
-        var pie = d3.pie().value(function(d) { return d.value; })(filteredData);
-    
-        // Create an arc generator
-        var arc = d3.arc().innerRadius(0).outerRadius(radius);
-    
-        // Create arcs for each slice of the pie chart
-        var arcs = svg.selectAll('.arc')
-            .data(pie)
-            .enter().append('g')
-            .attr('class', 'arc');
-    
-            arcs.append('path')
-        .attr('d', arc)
-        .attr('fill', function(d, i, nodes) {
-            var factor = i / (nodes.length - 1);
-            var interpolatedRgb = interpolateColor(headerBgColorRgb, factor);
-            return `rgb(${interpolatedRgb.join(',')})`;
-        })
-        .attr('stroke', metricBorderColor)
-        .attr('stroke-width', '2px');
-
-        // Append text elements to the arcs to display percentages
-        arcs.append('text')
-            .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
-            .attr('dy', '0.35em')
-            .attr('text-anchor', 'middle')
-            .text(function(d) { return d.data.value + '%'; });
-    
-        // Create a legend
-        var legend = svg.selectAll('.legend')
-            .data(filteredData)
-            .enter().append('g')
-            .attr('class', 'legend')
-            .attr('transform', function(d, i) { return 'translate(220,' + (i - data.length / 2) * 20 + ')'; });
-    
-        // Draw legend rectangles
-        legend.append('rect')
-            .attr('width', 18)
-            .attr('height', 18)
-            .attr('fill', function(d, i) {
-                var factor = i / (data.length - 1);
+            // Filter out stages with 0 percentage
+            var filteredData = data.filter(function(d) { return d.value > 0; });
+        
+            // Set dimensions and radius of the pie chart
+            var width = 600;
+            var height = 400;
+            var radius = Math.min(width, height) / 2;
+        
+            // Create the SVG container for the chart and set its dimensions
+            var svg = d3.select('#chartContainer').append('svg')
+                .attr('width', width + 100) // Add extra width for the legend
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + radius + ',' + height / 2 + ')');
+        
+            // Create a pie generator
+            var pie = d3.pie().value(function(d) { return d.value; })(filteredData);
+        
+            // Create an arc generator
+            var arc = d3.arc().innerRadius(0).outerRadius(radius);
+        
+            // Create arcs for each slice of the pie chart
+            var arcs = svg.selectAll('.arc')
+                .data(pie)
+                .enter().append('g')
+                .attr('class', 'arc');
+        
+                arcs.append('path')
+            .attr('d', arc)
+            .attr('fill', function(d, i, nodes) {
+                var factor = i / (nodes.length - 1);
                 var interpolatedRgb = interpolateColor(headerBgColorRgb, factor);
                 return `rgb(${interpolatedRgb.join(',')})`;
+            })
+            .attr('stroke', metricBorderColor)
+            .attr('stroke-width', '2px');
+
+            // Append text elements to the arcs to display percentages
+            arcs.append('text')
+                .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
+                .attr('dy', '0.35em')
+                .attr('text-anchor', 'middle')
+                .text(function(d) { return d.data.value + '%'; });
+        
+            // Create a legend
+            var legend = svg.selectAll('.legend')
+                .data(filteredData)
+                .enter().append('g')
+                .attr('class', 'legend')
+                .attr('transform', function(d, i) { return 'translate(220,' + (i - data.length / 2) * 20 + ')'; });
+        
+            // Draw legend rectangles
+            legend.append('rect')
+                .attr('width', 18)
+                .attr('height', 18)
+                .attr('fill', function(d, i) {
+                    var factor = i / (data.length - 1);
+                    var interpolatedRgb = interpolateColor(headerBgColorRgb, factor);
+                    return `rgb(${interpolatedRgb.join(',')})`;
+                });
+        
+            // Draw legend text
+            legend.append('text')
+                .attr('x', 24)
+                .attr('y', 9)
+                .attr('y', 9)
+                .attr('dy', '.35em')
+                .attr('fill', defaultTextColor) // Set the text color to the default text color
+                .text(function(d) { return d.stage; });
+            }
+        
+            document.addEventListener('DOMContentLoaded', fetchAndDisplaySleepStages);
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const dropdown = document.querySelector('drop-down');
+              const toggleButton = dropdown.querySelector('.dropbutton');
+          
+              toggleButton.addEventListener('click', () => {
+                const isOpen = dropdown.hasAttribute('open');
+                if (isOpen) {
+                  dropdown.removeAttribute('open');
+                } else {
+                  dropdown.setAttribute('open', '');
+                }
+              });
             });
-    
-        // Draw legend text
-        legend.append('text')
-            .attr('x', 24)
-            .attr('y', 9)
-            .attr('y', 9)
-            .attr('dy', '.35em')
-            .attr('fill', defaultTextColor) // Set the text color to the default text color
-            .text(function(d) { return d.stage; });
-    </script>
+            document.addEventListener('DOMContentLoaded', () => {
+            const isLightMode = localStorage.getItem('lightMode') === 'true';
+            document.body.classList.toggle('light-mode', isLightMode);
+
+            // If you're using a custom toggle-switch element on multiple pages,
+            // you may also want to ensure it's in the correct state:
+            const toggleSwitch = document.querySelector('toggle-switch');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('on', isLightMode);
+            }});
+          </script>
+        <script type="module" src="../drop-down.ts"></script>
+        <script type="module" src="../chart-toggle.ts"></script>
 
 </body>
 </html>
