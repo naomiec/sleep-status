@@ -42,38 +42,51 @@
         SpO2 Info
     </h1>
     <p id="spo2"></p>
+    
     <script>
-        // Generate a random SpO2 value
-        var spo2 = Math.floor(Math.random() * 5) + 95;
-
-        // Display SpO2 value
-        document.getElementById('spo2').innerText = "SpO2: " + spo2 + "%";
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+      async function fetchAndDisplaySpO2() {
+          try {
+              const response = await fetch('http://localhost:3000/api/spO2');
+              if (!response.ok) {
+                  throw new Error('Failed to fetch SpO2 data');
+              }
+              const data = await response.json();
+              const spo2Value = data.value.avg;
+              document.getElementById('spo2').innerText = `SpO2 Level: ${spo2Value}%`;
+          } catch (error) {
+              console.error('Error fetching SpO2 data:', error);
+              document.getElementById('spo2').innerText = 'Error fetching data';
+          }
+      }
+  
+      document.addEventListener('DOMContentLoaded', () => {
+          fetchAndDisplaySpO2();
+  
           const dropdown = document.querySelector('drop-down');
           const toggleButton = dropdown.querySelector('.dropbutton');
       
           toggleButton.addEventListener('click', () => {
-            const isOpen = dropdown.hasAttribute('open');
-            if (isOpen) {
-              dropdown.removeAttribute('open');
-            } else {
-              dropdown.setAttribute('open', '');
-            }
+              const isOpen = dropdown.hasAttribute('open');
+              if (isOpen) {
+                  dropdown.removeAttribute('open');
+              } else {
+                  dropdown.setAttribute('open', '');
+              }
           });
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-        const isLightMode = localStorage.getItem('lightMode') === 'true';
-        document.body.classList.toggle('light-mode', isLightMode);
+  
+          const isLightMode = localStorage.getItem('lightMode') === 'true';
+          document.body.classList.toggle('light-mode', isLightMode);
+  
+          // If you're using a custom toggle-switch element on multiple pages,
+          // you may also want to ensure it's in the correct state:
+          const toggleSwitch = document.querySelector('toggle-switch');
+          if (toggleSwitch) {
+              toggleSwitch.setAttribute('on', isLightMode);
+          }
+      });
+  </script>
+  <script type="module" src="../drop-down.ts"></script>
 
-        // If you're using a custom toggle-switch element on multiple pages,
-        // you may also want to ensure it's in the correct state:
-        const toggleSwitch = document.querySelector('toggle-switch');
-        if (toggleSwitch) {
-            toggleSwitch.setAttribute('on', isLightMode);
-        }});
-      </script>
-    <script type="module" src="../drop-down.ts"></script>
+   
 </body>
 </html>
