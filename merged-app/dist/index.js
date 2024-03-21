@@ -97,7 +97,6 @@ app.get("/api/sleep", (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173/app/index.html");
         res.json(response.data);
     }
     catch (error) {
