@@ -193,7 +193,6 @@ app.put("/api/profiles/:userid", (req, res) => {
         .then((profile) => res.json(profile))
         .catch((err) => res.status(404).end());
 });
-// Catch-all route to serve the frontend's index.html
-app.get("*", (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "../public/app/index.html"));
+app.get('/', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '../public/app/index.html'));
 });

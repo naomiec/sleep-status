@@ -10,11 +10,6 @@ export default defineConfig({
       }
     },
     outDir: "../public" // Build to the public directory
-  },
-  server: {
-    proxy: {
-      "/api": "http://localhost:3000"
-    }
   }
 });
 

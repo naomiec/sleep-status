@@ -70,3 +70,5 @@ export class ToggleSwitchElement extends LitElement {
     this.on = savedState === 'true';
   }
 }
+
+customElements.define('toggle-switch', ToggleSwitchElement);

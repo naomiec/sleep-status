@@ -213,7 +213,6 @@ app.put("/api/profiles/:userid", (req: Request, res: Response) => {
       .catch((err) => res.status(404).end());
   });
 
-  // Catch-all route to serve the frontend's index.html
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/app/index.html"));
-});
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/app/index.html'));
+  });
