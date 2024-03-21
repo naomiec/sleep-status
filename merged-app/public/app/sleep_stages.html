@@ -61,6 +61,7 @@
         return window.location.hostname === 'localhost'
             ? 'http://localhost:3000' // Development base URL
             : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+        }
         async function fetchAndDisplaySleepStages() {
             let awakePercentage, lightPercentage, deepPercentage, remPercentage;
 
@@ -205,7 +206,6 @@
                 .attr('fill', defaultTextColor) // Set the text color to the default text color
                 .text(function(d) { return d.stage; });
             }
-        }
         
             document.addEventListener('DOMContentLoaded', fetchAndDisplaySleepStages);
         </script>

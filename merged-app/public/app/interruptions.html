@@ -63,7 +63,7 @@
         return window.location.hostname === 'localhost'
             ? 'http://localhost:3000' // Development base URL
             : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
-}
+        }
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch(`${getApiBaseUrl()}/api/sleep`);

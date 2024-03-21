@@ -76,6 +76,7 @@
         return window.location.hostname === 'localhost'
             ? 'http://localhost:3000' // Development base URL
             : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+        }
         async function fetchSleepData() {
             try {
                 const response = await fetch(`${getApiBaseUrl()}/api/sleep`);
@@ -95,7 +96,6 @@
                 console.error('Error fetching sleep data:', error);
             }
         }
-    }
 
         document.addEventListener('DOMContentLoaded', fetchSleepData);
     </script>

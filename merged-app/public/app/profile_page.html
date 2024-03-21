@@ -69,6 +69,7 @@
         return window.location.hostname === 'localhost'
             ? 'http://localhost:3000' // Development base URL
             : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+      }
         document.addEventListener('DOMContentLoaded', async () => {
           const userid = 'user2';
           try {
@@ -84,7 +85,6 @@
               console.error('Failed to fetch profile:', error);
           }
         });
-      };
     </script>
 </body>
 </html>

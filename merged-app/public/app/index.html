@@ -30,6 +30,7 @@
         return window.location.hostname === 'localhost'
             ? 'http://localhost:3000' // Development base URL
             : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+        }
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch(`${getApiBaseUrl()}/api/sleep`);
@@ -45,7 +46,6 @@
                 console.error('Error fetching sleep data:', error);
             }
         });
-    }
     </script>
     
     <script>
@@ -84,7 +84,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/app-B8PL9Q55.js"></script>
+
+
+  <script type="module" crossorigin src="/assets/app-Ba89rpc0.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/app-BUak3pWd.css">
 </head>
 <body>
@@ -103,7 +105,7 @@
         <div class="score-box">
             <h1>
                 <svg class="icon">
-                    <use href="/assets/sleep-CPtS16YK-CPtS16YK-CPtS16YK-CPtS16YK-CPtS16YK.svg#icon-sleeping" />
+                    <use href="/assets/sleep-CPtS16YK-CPtS16YK-CPtS16YK-CPtS16YK-CPtS16YK-CPtS16YK.svg#icon-sleeping" />
                 </svg>
                 Sleep Score
             </h1>
