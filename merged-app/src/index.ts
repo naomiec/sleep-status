@@ -30,50 +30,6 @@ app.listen(port, () => {
 
 
 // Fitbit routes ------------------------------------------
-const refreshTokenIfNeeded = async (userId: string) => {
-    const tokenData = await Token.findOne({ userId });
-    if (!tokenData) {
-      throw new Error('Token not found');
-    }
-  
-    // Assuming you have a way to check if the token is expired
-    if (isTokenExpired(tokenData.accessToken)) {
-      // Refresh the token
-      const response = await axios({
-        method: 'post',
-        url: 'https://api.fitbit.com/oauth2/token',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')
-        },
-        data: `grant_type=refresh_token&refresh_token=${tokenData.refreshToken}`
-      });
-  
-      const { access_token, refresh_token, expires_in } = response.data;
-  
-      // Update the token in the database
-      await Token.findOneAndUpdate(
-        { userId },
-        {
-          accessToken: access_token,
-          refreshToken: refresh_token,
-          expiresIn: expires_in
-        },
-        { new: true }
-      );
-    }
-  };
-
-  function isTokenExpired(accessToken: string): boolean {
-    const payloadBase64 = accessToken.split('.')[1];
-    const decodedJson = Buffer.from(payloadBase64, 'base64').toString();
-    const decoded = JSON.parse(decodedJson);
-    const expiry = decoded.exp; // Assuming the decoded token has an 'exp' field with a Unix timestamp
-    const now = Math.floor(Date.now() / 1000); // Current time in Unix timestamp
-    return now > expiry; // Adjusted to use '>' to check if the current time is strictly after the expiry time
-}
-
-
 app.get("/auth", (req: Request, res: Response) => {
   const clientId = process.env.CLIENT_ID;
   const redirectUri = encodeURIComponent("http://localhost:3000/callback");
@@ -117,7 +73,47 @@ app.get("/callback", async (req: Request, res: Response) => {
   }
 });
 
-app.options("/api/sleep", cors());
+// Function to refresh the token if it's expired
+async function refreshTokenIfNeeded(userId: string) {
+    const tokenData = await Token.findOne({ userId });
+    if (!tokenData) {
+        throw new Error('Token not found');
+    }
+
+    const { refreshToken, expiresIn } = tokenData;
+    const tokenExpired = (Date.now() >= new Date(expiresIn).getTime());
+
+    if (tokenExpired) {
+        // Refresh the token
+        const response = await axios({
+            method: 'post',
+            url: 'https://api.fitbit.com/oauth2/token',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')
+            },
+            data: `grant_type=refresh_token&refresh_token=${refreshToken}`
+        });
+
+        const { access_token, refresh_token, expires_in } = response.data;
+
+        // Update the token in the database
+        await Token.findOneAndUpdate(
+            { userId },
+            {
+                accessToken: access_token,
+                refreshToken: refresh_token,
+                expiresIn: new Date(Date.now() + expires_in * 1000), // Convert expiresIn to a future date
+            },
+            { new: true }
+        );
+
+        return access_token;
+    } else {
+        return tokenData.accessToken;
+    }
+}
+
 app.get("/api/sleep", async (req: Request, res: Response) => {
   const userId = "naomi";
 
@@ -128,11 +124,11 @@ app.get("/api/sleep", async (req: Request, res: Response) => {
   const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
 
   try {
+      const accessToken = await refreshTokenIfNeeded(userId);
       const tokenData = await Token.findOne({ userId });
       if (!tokenData) {
           return res.status(404).send('Token not found');
       }
-      const { accessToken } = tokenData;
 
       const response = await axios({
           method: 'get',
@@ -161,11 +157,11 @@ app.get("/api/spO2", async (req: Request, res: Response) => {
   const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
 
   try {
+      const accessToken = await refreshTokenIfNeeded(userId);
       const tokenData = await Token.findOne({ userId });
       if (!tokenData) {
           return res.status(404).send('Token not found');
       }
-      const { accessToken } = tokenData;
 
       // Use the calculated date for fetching SpO2 data
       const response = await axios({
