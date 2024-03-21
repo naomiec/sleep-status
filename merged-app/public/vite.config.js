@@ -9,6 +9,12 @@ export default defineConfig({
         app: resolve(__dirname, "app/index.html")
       }
     },
-    outDir: "." // Build to the current directory
+    outDir: "../public" // Build to the public directory
+  },
+  server: {
+    proxy: {
+      "/api": "http://localhost:3000"
+    }
   }
 });
+

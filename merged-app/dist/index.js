@@ -26,11 +26,11 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 // Serve static files from the "public" directory
 app.use(express_1.default.static(path_1.default.join(__dirname, "../public")));
-// Catch-all route to serve the frontend's index.html
-app.get("*", (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "../public/app/index.html"));
-});
-app.use((0, cors_1.default)());
+const corsOptions = {
+    origin: ['http://howdidnaomisleep.us-west-1.elasticbeanstalk.com', 'http://localhost:3000'],
+    optionsSuccessStatus: 200
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
@@ -192,4 +192,8 @@ app.put("/api/profiles/:userid", (req, res) => {
         .update(userid, newProfile)
         .then((profile) => res.json(profile))
         .catch((err) => res.status(404).end());
+});
+// Catch-all route to serve the frontend's index.html
+app.get("*", (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, "../public/app/index.html"));
 });

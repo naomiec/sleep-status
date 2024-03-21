@@ -9,6 +9,7 @@
     <script type="module" src="../toggle-switch.ts"></script>
     
     <script>
+      
       document.addEventListener('DOMContentLoaded', () => {
         const toggleSwitch = document.querySelector('toggle-switch');
         const modeLabel = document.getElementById('mode-label');
@@ -63,10 +64,15 @@
         </toggle-switch>
     </div>
     <script>
+      function getApiBaseUrl() {
+        // Check if running on localhost (development)
+        return window.location.hostname === 'localhost'
+            ? 'http://localhost:3000' // Development base URL
+            : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
         document.addEventListener('DOMContentLoaded', async () => {
           const userid = 'user2';
           try {
-              const response = await fetch(`http://localhost:3000/api/profiles/${userid}`);
+              const response = await fetch(`${getApiBaseUrl()}/api/profiles/${userid}`);
               if (!response.ok) {
                   throw new Error('Profile not found');
               }
@@ -77,7 +83,8 @@
           } catch (error) {
               console.error('Failed to fetch profile:', error);
           }
-      });
+        });
+      };
     </script>
 </body>
 </html>

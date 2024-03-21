@@ -44,9 +44,15 @@
     <p id="spo2"></p>
     
     <script>
+        function getApiBaseUrl() {
+        // Check if running on localhost (development)
+        return window.location.hostname === 'localhost'
+            ? 'http://localhost:3000' // Development base URL
+            : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+        }
       async function fetchAndDisplaySpO2() {
           try {
-              const response = await fetch('http://localhost:3000/api/spO2');
+              const response = await fetch(`${getApiBaseUrl()}/api/spO2`);
               if (!response.ok) {
                   throw new Error('Failed to fetch SpO2 data');
               }

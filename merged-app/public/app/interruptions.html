@@ -58,9 +58,15 @@
     <ul id="timestamps"></ul>
    
     <script>
+        function getApiBaseUrl() {
+        // Check if running on localhost (development)
+        return window.location.hostname === 'localhost'
+            ? 'http://localhost:3000' // Development base URL
+            : 'https://howdidnaomisleep.us-west-1.elasticbeanstalk.com'; // Production base URL
+}
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/sleep');
+                const response = await fetch(`${getApiBaseUrl()}/api/sleep`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch sleep data');
                 }

@@ -15,12 +15,13 @@ const port = process.env.PORT || 3000;
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "../public")));
-// Catch-all route to serve the frontend's index.html
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/app/index.html"));
-});
 
-app.use(cors());
+const corsOptions = {
+    origin: ['http://howdidnaomisleep.us-west-1.elasticbeanstalk.com', 'http://localhost:3000'],
+    optionsSuccessStatus: 200 
+  };
+  
+app.use(cors(corsOptions));
 app.use(express.json());
 
 
@@ -211,3 +212,8 @@ app.put("/api/profiles/:userid", (req: Request, res: Response) => {
       .then((profile: Profile) => res.json(profile))
       .catch((err) => res.status(404).end());
   });
+
+  // Catch-all route to serve the frontend's index.html
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/app/index.html"));
+});
