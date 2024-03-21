@@ -24,8 +24,8 @@ dotenv_1.default.config();
 (0, mongoConnect_1.connect)("calpoly");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-// Serve static files from the "public" directory
-app.use(express_1.default.static(path_1.default.join(__dirname, "../public")));
+// Serve static files from the "public/app" directory
+app.use(express_1.default.static(path_1.default.join(__dirname, "../public/app")));
 const corsOptions = {
     origin: ['http://howdidnaomisleep.us-west-1.elasticbeanstalk.com', 'http://localhost:3000'],
     optionsSuccessStatus: 200
