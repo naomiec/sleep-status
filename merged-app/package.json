@@ -22,7 +22,8 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.24",
+    "concurrently": "^6.3.0",
     "nodemon": "^2.0.20",
-    "concurrently": "^6.3.0"
+    "typescript": "^5.4.3"
   }
 }
