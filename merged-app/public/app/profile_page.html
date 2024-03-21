@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/tokens.css">
+    <link rel="stylesheet" href="styles/page.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+    <script type="module" src="../toggle-switch.ts"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const toggleSwitch = document.querySelector('toggle-switch');
+        const modeLabel = document.getElementById('mode-label');
+    
+        // Function to update the label based on the 'on' attribute
+        const updateLabel = () => {
+          const isChecked = toggleSwitch.hasAttribute('on');
+          modeLabel.textContent = isChecked ? 'Light Mode' : 'Dark Mode';
+        };
+    
+        // Create a MutationObserver to observe changes to attributes
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === "attributes" && mutation.attributeName === "on") {
+              updateLabel();
+              // Update the 'light-mode' class on the <body> element
+              document.body.classList.toggle('light-mode', toggleSwitch.hasAttribute('on'));
+            }
+          });
+        });
+    
+        // Start observing the 'toggle-switch' for attribute changes
+        observer.observe(toggleSwitch, { attributes: true });
+    
+        // Initial label update and class toggle
+        updateLabel();
+        document.body.classList.toggle('light-mode', toggleSwitch.hasAttribute('on'));
+      });
+    </script>
+
+    <style>
+        toggle-switch {
+            position: fixed; /* Fixed position to keep it at the bottom right on every page */
+            bottom: 20px; /* Distance from the bottom */
+            right: 20px; /* Distance from the right */
+            }
+        toggle-switch[on] {
+            display: block; /* Show toggle switch when 'on' attribute is present */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1><strong></strong>User Profile</h1>
+        <p><strong>Name:</strong> <span id="profileName">John Doe</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">john.doe@example.com</span></p>
+        <a href="index.html">Return Home</a>
+    </div>
+     <div class="toggle-switch">
+        <toggle-switch id="toggle-switch">
+            <label id="mode-label"></label> 
+        </toggle-switch>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+          const userid = 'user2';
+          try {
+              const response = await fetch(`http://localhost:3000/api/profiles/${userid}`);
+              if (!response.ok) {
+                  throw new Error('Profile not found');
+              }
+              const profile = await response.json();
+              // Update profile information
+              document.getElementById('profileName').textContent = profile.name;
+              document.getElementById('profileEmail').textContent = profile.email;
+          } catch (error) {
+              console.error('Failed to fetch profile:', error);
+          }
+      });
+    </script>
+</body>
+</html>

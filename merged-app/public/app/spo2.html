@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/tokens.css">
+    <title>SpO2 Info</title>
+    <style>
+        body {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .dropdown-content {
+        display: none; /* Hide dropdown content by default */
+        }
+        drop-down[open] .dropdown-content {
+            display: block; /* Show dropdown content when 'open' attribute is present */
+        }
+    </style>
+    <link rel="stylesheet" href="styles/page.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+</head>
+<body>
+  <drop-down>
+    <!-- This checkbox is hidden but controls the dropdown state -->
+    <input type="checkbox" id="dropdownCheckbox" style="display: none;" />
+    <!-- The label acts as the toggle button for the dropdown -->
+    <label for="dropdownCheckbox" class="dropbutton">Home</label>
+    <!-- The dropdown content goes into a named slot "menu" -->
+    <div class="dropdown-content">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hours_asleep.html">Hours Asleep</a></li>
+            <li><a href="sleep_stages.html">Sleep Stages</a></li>
+            <li><a href="interruptions.html">Interruptions</a></li>
+        </ul>
+    </div>
+</drop-down>
+    <h1 class="metric">
+        <svg class="icon">
+           <use href="icons/sleep.svg#icon-sp02" />
+        </svg>
+        SpO2 Info
+    </h1>
+    <p id="spo2"></p>
+    
+    <script>
+      async function fetchAndDisplaySpO2() {
+          try {
+              const response = await fetch('http://localhost:3000/api/spO2');
+              if (!response.ok) {
+                  throw new Error('Failed to fetch SpO2 data');
+              }
+              const data = await response.json();
+              const spo2Value = data.value.avg;
+              document.getElementById('spo2').innerText = `SpO2 Level: ${spo2Value}%`;
+          } catch (error) {
+              console.error('Error fetching SpO2 data:', error);
+              document.getElementById('spo2').innerText = 'Error fetching data';
+          }
+      }
+  
+      document.addEventListener('DOMContentLoaded', () => {
+          fetchAndDisplaySpO2();
+  
+          const dropdown = document.querySelector('drop-down');
+          const toggleButton = dropdown.querySelector('.dropbutton');
+      
+          toggleButton.addEventListener('click', () => {
+              const isOpen = dropdown.hasAttribute('open');
+              if (isOpen) {
+                  dropdown.removeAttribute('open');
+              } else {
+                  dropdown.setAttribute('open', '');
+              }
+          });
+  
+          const isLightMode = localStorage.getItem('lightMode') === 'true';
+          document.body.classList.toggle('light-mode', isLightMode);
+  
+          const toggleSwitch = document.querySelector('toggle-switch');
+          if (toggleSwitch) {
+              toggleSwitch.setAttribute('on', isLightMode);
+          }
+      });
+  </script>
+  <script type="module" src="../drop-down.ts"></script>
+
+   
+</body>
+</html>

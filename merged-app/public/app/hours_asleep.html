@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/tokens.css">
+    <title>Hours Asleep</title>
+    <style>
+        body {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .dropdown-content {
+        display: none; /* Hide dropdown content by default */
+        
+        }
+        drop-down[open] .dropdown-content {
+            display: block; /* Show dropdown content when 'open' attribute is present */
+        }
+    </style>
+    <link rel="stylesheet" href="styles/page.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@300&family=Sixtyfour&family=Workbench&display=swap" rel="stylesheet">
+</head>
+<body>
+    <script type="module" src="../drop-down.ts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const dropdown = document.querySelector('drop-down');
+          const toggleButton = dropdown.querySelector('.dropbutton');
+      
+          toggleButton.addEventListener('click', () => {
+            const isOpen = dropdown.hasAttribute('open');
+            if (isOpen) {
+              dropdown.removeAttribute('open');
+            } else {
+              dropdown.setAttribute('open', '');
+            }
+          });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+        const isLightMode = localStorage.getItem('lightMode') === 'true';
+        document.body.classList.toggle('light-mode', isLightMode);
+
+        const toggleSwitch = document.querySelector('toggle-switch');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('on', isLightMode);
+        }});
+      </script>
+       <drop-down>
+        <!-- This checkbox is hidden but controls the dropdown state -->
+        <input type="checkbox" id="dropdownCheckbox" style="display: none;" />
+        <!-- The label acts as the toggle button for the dropdown -->
+        <label for="dropdownCheckbox" class="dropbutton">Home</label>
+        <!-- The dropdown content goes into a named slot "menu" -->
+        <div class="dropdown-content">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="sleep_stages.html">Sleep Stages</a></li>
+                <li><a href="spo2.html">SpO2</a></li>
+                <li><a href="interruptions.html">Interruptions</a></li>
+            </ul>
+        </div>
+    </drop-down>
+    <h1 class="metric">
+        <svg class="icon">
+            <use href="icons/sleep.svg#icon-hours-asleep" />
+        </svg>
+        Hours Asleep
+    </h1>
+    <p id="hoursAsleep"></p>
+    <p id="bedTime"></p>
+    <p id="wakeTime"></p>
+    
+    <script>
+        async function fetchSleepData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/sleep');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sleep data');
+                }
+                const data = await response.json();
+                const sleepData = data.sleep[0];
+
+                const startTime = new Date(sleepData.startTime);
+                const endTime = new Date(sleepData.endTime);
+
+                // Convert to 12-hour format and display
+                document.getElementById('hoursAsleep').innerText = "Hours Asleep: " + (sleepData.duration / (1000 * 60 * 60)).toFixed(2) + " hours";                document.getElementById('bedTime').innerText = "Bed Time: " + startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                document.getElementById('wakeTime').innerText = "Wake Time: " + endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            } catch (error) {
+                console.error('Error fetching sleep data:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchSleepData);
+    </script>
+
+</body>
+</html>
