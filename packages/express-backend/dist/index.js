@@ -36,7 +36,6 @@ app.get("/auth", (req, res) => {
     res.redirect(`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&expires_in=604800`);
 });
 // Handle the callback from Fitbit
-// Handle the callback from Fitbit
 app.get("/callback", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const code = req.query.code;
     try {
@@ -51,7 +50,7 @@ app.get("/callback", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
         const { access_token, refresh_token, expires_in, token_type } = response.data;
         const userId = "naomi";
-        // Use findOneAndUpdate with upsert option
+        // Using findOneAndUpdate with upsert option
         yield token_1.Token.findOneAndUpdate({ userId }, // query
         {
             userId,
@@ -69,6 +68,40 @@ app.get("/callback", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(500).send('An error occurred');
     }
 }));
+// Function to refresh the token if it's expired
+function refreshTokenIfNeeded(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const tokenData = yield token_1.Token.findOne({ userId });
+        if (!tokenData) {
+            throw new Error('Token not found');
+        }
+        const { refreshToken, expiresIn } = tokenData;
+        const tokenExpired = (Date.now() >= new Date(expiresIn).getTime());
+        if (tokenExpired) {
+            // Refresh the token
+            const response = yield (0, axios_1.default)({
+                method: 'post',
+                url: 'https://api.fitbit.com/oauth2/token',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')
+                },
+                data: `grant_type=refresh_token&refresh_token=${refreshToken}`
+            });
+            const { access_token, refresh_token, expires_in } = response.data;
+            // Update the token in the database
+            yield token_1.Token.findOneAndUpdate({ userId }, {
+                accessToken: access_token,
+                refreshToken: refresh_token,
+                expiresIn: new Date(Date.now() + expires_in * 1000), // Convert expiresIn to a future date
+            }, { new: true });
+            return access_token;
+        }
+        else {
+            return tokenData.accessToken;
+        }
+    });
+}
 app.get("/api/sleep", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = "naomi";
     // Calculate yesterday's date
@@ -77,11 +110,11 @@ app.get("/api/sleep", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     yesterday.setDate(today.getDate() - 1);
     const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
     try {
+        const accessToken = yield refreshTokenIfNeeded(userId);
         const tokenData = yield token_1.Token.findOne({ userId });
         if (!tokenData) {
             return res.status(404).send('Token not found');
         }
-        const { accessToken } = tokenData;
         const response = yield (0, axios_1.default)({
             method: 'get',
             // Use the calculated date for both start and end date to get yesterday's sleep data
@@ -100,18 +133,18 @@ app.get("/api/sleep", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 app.get("/api/spO2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = "naomi"; // Assuming you're using the same user identification logic
+    const userId = "naomi";
     // Calculate yesterday's date
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
     const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
     try {
+        const accessToken = yield refreshTokenIfNeeded(userId);
         const tokenData = yield token_1.Token.findOne({ userId });
         if (!tokenData) {
             return res.status(404).send('Token not found');
         }
-        const { accessToken } = tokenData;
         // Use the calculated date for fetching SpO2 data
         const response = yield (0, axios_1.default)({
             method: 'get',

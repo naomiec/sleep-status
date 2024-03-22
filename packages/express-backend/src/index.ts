@@ -32,7 +32,6 @@ app.get("/auth", (req: Request, res: Response) => {
 });
 
 // Handle the callback from Fitbit
-// Handle the callback from Fitbit
 app.get("/callback", async (req: Request, res: Response) => {
   const code = req.query.code as string;
   try {
@@ -48,7 +47,7 @@ app.get("/callback", async (req: Request, res: Response) => {
       const { access_token, refresh_token, expires_in, token_type } = response.data;
       const userId = "naomi"; 
 
-      // Use findOneAndUpdate with upsert option
+      // Using findOneAndUpdate with upsert option
       await Token.findOneAndUpdate(
           { userId }, // query
           { 
@@ -68,6 +67,47 @@ app.get("/callback", async (req: Request, res: Response) => {
   }
 });
 
+// Function to refresh the token if it's expired
+async function refreshTokenIfNeeded(userId: string) {
+    const tokenData = await Token.findOne({ userId });
+    if (!tokenData) {
+        throw new Error('Token not found');
+    }
+
+    const { refreshToken, expiresIn } = tokenData;
+    const tokenExpired = (Date.now() >= new Date(expiresIn).getTime());
+
+    if (tokenExpired) {
+        // Refresh the token
+        const response = await axios({
+            method: 'post',
+            url: 'https://api.fitbit.com/oauth2/token',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')
+            },
+            data: `grant_type=refresh_token&refresh_token=${refreshToken}`
+        });
+
+        const { access_token, refresh_token, expires_in } = response.data;
+
+        // Update the token in the database
+        await Token.findOneAndUpdate(
+            { userId },
+            {
+                accessToken: access_token,
+                refreshToken: refresh_token,
+                expiresIn: new Date(Date.now() + expires_in * 1000), // Convert expiresIn to a future date
+            },
+            { new: true }
+        );
+
+        return access_token;
+    } else {
+        return tokenData.accessToken;
+    }
+}
+
 app.get("/api/sleep", async (req: Request, res: Response) => {
   const userId = "naomi";
 
@@ -78,11 +118,11 @@ app.get("/api/sleep", async (req: Request, res: Response) => {
   const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
 
   try {
+      const accessToken = await refreshTokenIfNeeded(userId);
       const tokenData = await Token.findOne({ userId });
       if (!tokenData) {
           return res.status(404).send('Token not found');
       }
-      const { accessToken } = tokenData;
 
       const response = await axios({
           method: 'get',
@@ -111,11 +151,11 @@ app.get("/api/spO2", async (req: Request, res: Response) => {
   const formattedDate = yesterday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
 
   try {
+      const accessToken = await refreshTokenIfNeeded(userId);
       const tokenData = await Token.findOne({ userId });
       if (!tokenData) {
           return res.status(404).send('Token not found');
       }
-      const { accessToken } = tokenData;
 
       // Use the calculated date for fetching SpO2 data
       const response = await axios({
